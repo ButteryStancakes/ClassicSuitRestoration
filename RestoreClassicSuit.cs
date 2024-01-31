@@ -8,7 +8,7 @@ namespace ClassicSuitRestoration
 
         public static void SpawnClassicSuit()
         {
-            if (classicSuitIndex > 0 && StartOfRound.Instance.IsServer)
+            if (classicSuitIndex > 0 && StartOfRound.Instance.IsServer && !StartOfRound.Instance.isChallengeFile)
                 typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, new object[]{classicSuitIndex});
         }
     }
