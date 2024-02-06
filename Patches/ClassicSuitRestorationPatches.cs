@@ -1,8 +1,5 @@
-using System.IO;
-using UnityEngine;
 using HarmonyLib;
-using BepInEx;
-using System.Reflection;
+using Unity.Netcode;
 
 namespace ClassicSuitRestoration.Patches
 {
@@ -11,29 +8,14 @@ namespace ClassicSuitRestoration.Patches
     {
         [HarmonyPatch(typeof(StartOfRound), "Awake")]
         [HarmonyPostfix]
-        public static void PostAwake(StartOfRound __instance)
+        public static void StartOfRoundPostAwake()
         {
-            try
-            {
-                UnlockableItem classicSuit = new UnlockableItem();
-                classicSuit.unlockableName = "Classic suit";
-                classicSuit.suitMaterial = Object.Instantiate(__instance.unlockablesList.unlockables[0].suitMaterial);
-                classicSuit.suitMaterial.name = "OldSuit";
-                AssetBundle classicSuitBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "classicsuitrestoration"));
-                classicSuit.suitMaterial.mainTexture = classicSuitBundle.LoadAsset<Texture2D>("OldSuitMockUp");
-                classicSuitBundle.Unload(false);
-                RestoreClassicSuit.classicSuitIndex = __instance.unlockablesList.unlockables.Count;
-                __instance.unlockablesList.unlockables.Add(classicSuit);
-            }
-            catch
-            {
-                RestoreClassicSuit.classicSuitIndex = -1;
-            }
+            RestoreClassicSuit.InitClassicSuit();
         }
 
         [HarmonyPatch(typeof(StartOfRound), "Start")]
         [HarmonyPostfix]
-        public static void PostStart()
+        public static void StartOfRoundPostStart()
         {
             RestoreClassicSuit.SpawnClassicSuit();
         }
@@ -43,6 +25,25 @@ namespace ClassicSuitRestoration.Patches
         public static void PostResetShip()
         {
             RestoreClassicSuit.SpawnClassicSuit();
+        }
+
+        [HarmonyPatch(typeof(UnlockableSuit), "Update")]
+        [HarmonyPrefix]
+        public static void UnlockableSuitPreUpdate(UnlockableSuit __instance)
+        {
+            if (GameNetworkManager.Instance != null && NetworkManager.Singleton != null && !NetworkManager.Singleton.ShutdownInProgress && __instance.suitID != __instance.syncedSuitID.Value && __instance.syncedSuitID.Value >= StartOfRound.Instance.unlockablesList.unlockables.Count)
+                RestoreClassicSuit.InitClassicSuit();
+        }
+
+        [HarmonyPatch(typeof(UnlockableSuit), "SwitchSuitForPlayer")]
+        [HarmonyPrefix]
+        public static void PreSwitchSuitForPlayer(ref int suitID)
+        {
+            if (suitID >= StartOfRound.Instance.unlockablesList.unlockables.Count)
+            {
+                RestoreClassicSuit.InitClassicSuit();
+                suitID = RestoreClassicSuit.classicSuitIndex;
+            }
         }
     }
 }
