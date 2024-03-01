@@ -17,14 +17,16 @@ namespace ClassicSuitRestoration.Patches
         [HarmonyPostfix]
         public static void StartOfRoundPostStart()
         {
-            RestoreClassicSuit.SpawnClassicSuit();
+            if (!Plugin.configUnlockable.Value || RestoreClassicSuit.HasAllOtherSuits())
+                RestoreClassicSuit.SpawnClassicSuit();
         }
 
         [HarmonyPatch(typeof(StartOfRound), "ResetShip")]
         [HarmonyPostfix]
         public static void PostResetShip()
         {
-            RestoreClassicSuit.SpawnClassicSuit();
+            if (!Plugin.configUnlockable.Value)
+                RestoreClassicSuit.SpawnClassicSuit();
         }
 
         [HarmonyPatch(typeof(UnlockableSuit), "Update")]
@@ -44,6 +46,14 @@ namespace ClassicSuitRestoration.Patches
                 RestoreClassicSuit.InitClassicSuit();
                 suitID = RestoreClassicSuit.classicSuitIndex;
             }
+        }
+
+        [HarmonyPatch(typeof(TimeOfDay), "SetNewProfitQuota")]
+        [HarmonyPostfix]
+        public static void PostSetNewProfitQuota()
+        {
+            if (Plugin.configUnlockable.Value && RestoreClassicSuit.HasAllOtherSuits())
+                RestoreClassicSuit.SpawnClassicSuit();
         }
     }
 }

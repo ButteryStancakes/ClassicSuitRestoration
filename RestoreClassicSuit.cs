@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 using UnityEngine;
+using BepInEx.Bootstrap;
 
 namespace ClassicSuitRestoration
 {
@@ -31,9 +33,11 @@ namespace ClassicSuitRestoration
             UnlockableItem classicSuit = unlockablesList.unlockables.FirstOrDefault(unlockable => unlockable.unlockableName == "Veteran suit");
             if (classicSuit == null)
             {
-                classicSuit = new UnlockableItem();
-                classicSuit.unlockableName = "Veteran suit";
-                classicSuit.suitMaterial = Object.Instantiate(unlockablesList.unlockables[0].suitMaterial);
+                classicSuit = new()
+                {
+                    unlockableName = "Veteran suit",
+                    suitMaterial = Object.Instantiate(unlockablesList.unlockables[0].suitMaterial)
+                };
                 classicSuit.suitMaterial.name = "OldSuit";
                 try
                 {
@@ -60,7 +64,40 @@ namespace ClassicSuitRestoration
         {
             InitClassicSuit();
             if (classicSuitIndex > 0 && StartOfRound.Instance.IsServer && !StartOfRound.Instance.isChallengeFile && !StartOfRound.Instance.SpawnedShipUnlockables.ContainsKey(classicSuitIndex))
+            {
+                foreach (UnlockableSuit unlockableSuit in Object.FindObjectsOfType<UnlockableSuit>())
+                {
+                    if (unlockableSuit.syncedSuitID.Value == classicSuitIndex)
+                    {
+                        Plugin.Logger.LogWarning("Tried to spawn another classic suit on the rack while one already existed");
+                        return;
+                    }
+                }
+
                 typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, new object[]{classicSuitIndex});
+            }
+        }
+
+        internal static bool HasAllOtherSuits()
+        {
+            List<int> ownedSuits = new();
+            foreach (UnlockableSuit unlockableSuit in Object.FindObjectsOfType<UnlockableSuit>())
+            {
+                ownedSuits.Add(unlockableSuit.syncedSuitID.Value);
+                Plugin.Logger.LogInfo($"Player owns suit #{unlockableSuit.syncedSuitID.Value} - \"{StartOfRound.Instance.unlockablesList.unlockables[unlockableSuit.syncedSuitID.Value].unlockableName}\"");
+            }
+
+            for (int i = 1; i < classicSuitIndex; i++)
+            {
+                if (StartOfRound.Instance.unlockablesList.unlockables[i].unlockableType == 0 && !ownedSuits.Contains(i) && (StartOfRound.Instance.unlockablesList.unlockables[i].unlockableName != "Purple Suit" || Chainloader.PluginInfos.ContainsKey("butterystancakes.lethalcompany.purplesuitunlocker")))
+                {
+                    Plugin.Logger.LogInfo($"Player doesn't have #{i} - \"{StartOfRound.Instance.unlockablesList.unlockables[i].unlockableName}\"");
+                    return false;
+                }
+            }
+
+            Plugin.Logger.LogInfo($"Player will unlock classic suit");
+            return true;
         }
     }
 }
