@@ -89,7 +89,7 @@ namespace ClassicSuitRestoration
 
             for (int i = 1; i < classicSuitIndex; i++)
             {
-                if (StartOfRound.Instance.unlockablesList.unlockables[i].unlockableType == 0 && !ownedSuits.Contains(i) && (StartOfRound.Instance.unlockablesList.unlockables[i].unlockableName != "Purple Suit" || Chainloader.PluginInfos.ContainsKey("butterystancakes.lethalcompany.purplesuitunlocker")))
+                if (StartOfRound.Instance.unlockablesList.unlockables[i].unlockableType == 0 && !ownedSuits.Contains(i))
                 {
                     Plugin.Logger.LogInfo($"Player doesn't have #{i} - \"{StartOfRound.Instance.unlockablesList.unlockables[i].unlockableName}\"");
                     return false;
