@@ -1,3 +1,5 @@
+# v1.2.1
+- Made visor less saturated
 # v1.2.0
 - Updated for v50
 - Tweaked the suit texture (now has cyan visors for authenticity)
