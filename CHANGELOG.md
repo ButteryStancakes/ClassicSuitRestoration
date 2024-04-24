@@ -1,3 +1,9 @@
+# v2.0.0
+- Brightened several parts of the suit (helmet most noticeable)
+- Reduced normal intensity to make the suit smoother (I think the original had no normal map at all, but it looks good for minor details)
+- Should look almost indistinguishable from the teaser footage! I think this is the best we'll get unless Zeekerss releases the original files
+# v1.2.2
+- Visors now use their original, authentic color (turns out, there is a leftover material in the game with the right color value)
 # v1.2.1
 - Made visor less saturated
 # v1.2.0

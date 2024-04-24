@@ -25,7 +25,7 @@ namespace ClassicSuitRestoration.Patches
         [HarmonyPostfix]
         public static void PostResetShip()
         {
-            if (!Plugin.configUnlockable.Value)
+            if (!Plugin.configUnlockable.Value || RestoreClassicSuit.HasAllOtherSuits())
                 RestoreClassicSuit.SpawnClassicSuit();
         }
 

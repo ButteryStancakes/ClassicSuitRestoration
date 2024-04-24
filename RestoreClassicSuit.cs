@@ -43,6 +43,8 @@ namespace ClassicSuitRestoration
                 {
                     AssetBundle classicSuitBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "classicsuitrestoration"));
                     classicSuit.suitMaterial.mainTexture = classicSuitBundle.LoadAsset<Texture2D>("OldSuitMockUp");
+                    classicSuit.suitMaterial.SetColor("_BaseColor", Color.white);
+                    classicSuit.suitMaterial.SetFloat("_NormalScale", 0.021f);
                     classicSuitBundle.Unload(false);
                 }
                 catch (System.Exception e)
