@@ -1,3 +1,5 @@
+# v2.0.1
+- Suit should now properly be unlocked again after you get fired with a mod that lets you keep suits
 # v2.0.0
 - Brightened several parts of the suit (helmet most noticeable)
 - Reduced normal intensity to make the suit smoother (I think the original had no normal map at all, but it looks good for minor details)

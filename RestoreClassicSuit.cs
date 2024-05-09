@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BepInEx.Bootstrap;
 
 namespace ClassicSuitRestoration
 {
@@ -100,6 +100,13 @@ namespace ClassicSuitRestoration
 
             Plugin.Logger.LogInfo($"Player will unlock classic suit");
             return true;
+        }
+
+        internal static IEnumerator CheckSuitsAfterDelay()
+        {
+            yield return new WaitForSeconds(2f);
+            if (HasAllOtherSuits())
+                SpawnClassicSuit();
         }
     }
 }
