@@ -25,10 +25,7 @@ namespace ClassicSuitRestoration.Patches
         [HarmonyPostfix]
         public static void PostResetShip(StartOfRound __instance)
         {
-            if (!Plugin.configUnlockable.Value)
-                RestoreClassicSuit.SpawnClassicSuit();
-            else
-                __instance.StartCoroutine(RestoreClassicSuit.CheckSuitsAfterDelay());
+            __instance.StartCoroutine(RestoreClassicSuit.CheckSuitsAfterDelay());
         }
 
         [HarmonyPatch(typeof(UnlockableSuit), "Update")]

@@ -105,7 +105,7 @@ namespace ClassicSuitRestoration
         internal static IEnumerator CheckSuitsAfterDelay()
         {
             yield return new WaitForSeconds(2f);
-            if (HasAllOtherSuits())
+             if (!Plugin.configUnlockable.Value || HasAllOtherSuits())
                 SpawnClassicSuit();
         }
     }

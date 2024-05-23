@@ -1,3 +1,5 @@
+# v2.0.2
+- Hopefully fixed the suit not reappearing after being fired if you have Unlockable disabled
 # v2.0.1
 - Suit should now properly be unlocked again after you get fired with a mod that lets you keep suits
 # v2.0.0
