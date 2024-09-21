@@ -17,7 +17,7 @@ namespace ClassicSuitRestoration.Patches
         [HarmonyPostfix]
         public static void StartOfRoundPostStart()
         {
-            if (!Plugin.configUnlockable.Value || RestoreClassicSuit.HasAllOtherSuits())
+            if (!Plugin.configUnlockable.Value || ES3.Load("ClassicSuitRestoration_Unlocked", GameNetworkManager.Instance.currentSaveFileName, false))
                 RestoreClassicSuit.SpawnClassicSuit();
         }
 
@@ -25,6 +25,8 @@ namespace ClassicSuitRestoration.Patches
         [HarmonyPostfix]
         public static void PostResetShip(StartOfRound __instance)
         {
+            if (__instance.IsServer && GameNetworkManager.Instance != null)
+                ES3.DeleteKey("ClassicSuitRestoration_Unlocked", GameNetworkManager.Instance.currentSaveFileName);
             __instance.StartCoroutine(RestoreClassicSuit.CheckSuitsAfterDelay());
         }
 
@@ -52,7 +54,7 @@ namespace ClassicSuitRestoration.Patches
         public static void PostSetNewProfitQuota()
         {
             if (Plugin.configUnlockable.Value && RestoreClassicSuit.HasAllOtherSuits())
-                RestoreClassicSuit.SpawnClassicSuit();
+                RestoreClassicSuit.UnlockClassicSuit();
         }
     }
 }

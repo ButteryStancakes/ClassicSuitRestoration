@@ -42,9 +42,11 @@ namespace ClassicSuitRestoration
                 try
                 {
                     AssetBundle classicSuitBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "classicsuitrestoration"));
-                    classicSuit.suitMaterial.mainTexture = classicSuitBundle.LoadAsset<Texture2D>("OldSuitMockUp");
+                    Texture scavengerPlayerModel = classicSuitBundle.LoadAsset<Texture>("ScavengerPlayerModel");
+                    classicSuit.suitMaterial.SetTexture("_MainTex", scavengerPlayerModel);
+                    classicSuit.suitMaterial.SetTexture("_BaseColorMap", scavengerPlayerModel);
                     classicSuit.suitMaterial.SetColor("_BaseColor", Color.white);
-                    classicSuit.suitMaterial.SetFloat("_NormalScale", 0.021f);
+                    classicSuit.suitMaterial.SetTexture("_NormalMap", classicSuitBundle.LoadAsset<Texture>("ScavengerPlayerModel 1"));
                     classicSuitBundle.Unload(false);
                 }
                 catch (System.Exception e)
@@ -76,8 +78,15 @@ namespace ClassicSuitRestoration
                     }
                 }
 
-                typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, new object[]{classicSuitIndex});
+                typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, [classicSuitIndex]);
             }
+        }
+
+        internal static void UnlockClassicSuit()
+        {
+            if (Plugin.configUnlockable.Value && StartOfRound.Instance.IsServer && !StartOfRound.Instance.isChallengeFile)
+                ES3.Save("ClassicSuitRestoration_Unlocked", true, GameNetworkManager.Instance.currentSaveFileName);
+            SpawnClassicSuit();
         }
 
         internal static bool HasAllOtherSuits()
@@ -105,8 +114,10 @@ namespace ClassicSuitRestoration
         internal static IEnumerator CheckSuitsAfterDelay()
         {
             yield return new WaitForSeconds(2f);
-             if (!Plugin.configUnlockable.Value || HasAllOtherSuits())
+            if (!Plugin.configUnlockable.Value)
                 SpawnClassicSuit();
+            else if (HasAllOtherSuits())
+                UnlockClassicSuit();
         }
     }
 }
