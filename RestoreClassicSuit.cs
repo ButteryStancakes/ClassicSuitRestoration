@@ -94,7 +94,8 @@ namespace ClassicSuitRestoration
                     }
                 }
 
-                typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, [classicSuitIndex]);
+                //typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, [classicSuitIndex]);
+                StartOfRound.Instance.SpawnUnlockable(classicSuitIndex);
             }
         }
 
@@ -107,7 +108,7 @@ namespace ClassicSuitRestoration
 
         internal static bool HasAllOtherSuits()
         {
-            List<int> ownedSuits = new();
+            List<int> ownedSuits = [];
             foreach (UnlockableSuit unlockableSuit in Object.FindObjectsOfType<UnlockableSuit>())
             {
                 ownedSuits.Add(unlockableSuit.syncedSuitID.Value);
