@@ -46,7 +46,7 @@ namespace ClassicSuitRestoration
                     if (Plugin.configOfficial.Value)
                     {
                         suitTexture = classicSuitBundle.LoadAsset<Texture>("ScavengerPlayerModel");
-                        if (Plugin.configBirthday.Value || System.DateTime.Today.DayOfYear == new System.DateTime(2023, 10, 23).DayOfYear)
+                        if (Plugin.configBirthday.Value || (System.DateTime.Today.Month == 10 && System.DateTime.Today.Day == 23))
                         {
                             classicSuit.unlockableName = "Birthday suit";
                             classicSuit.headCostumeObject = classicSuitBundle.LoadAsset<GameObject>("PartyHatContainer");
