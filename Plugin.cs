@@ -9,7 +9,7 @@ namespace ClassicSuitRestoration
     [BepInDependency("butterystancakes.lethalcompany.keepunlocks", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
-        const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.0";
+        const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.1";
         public static ConfigEntry<bool> configUnlockable, configOfficial, configBirthday;
 
         internal static new ManualLogSource Logger;

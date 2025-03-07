@@ -39,6 +39,7 @@ namespace ClassicSuitRestoration
                     headCostumeObject = null
                 };
                 classicSuit.suitMaterial.name = "OldSuit";
+                classicSuit.unlockableName = "Brown suit";
                 try
                 {
                     AssetBundle classicSuitBundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "classicsuitrestoration"));
@@ -48,18 +49,18 @@ namespace ClassicSuitRestoration
                         suitTexture = classicSuitBundle.LoadAsset<Texture>("ScavengerPlayerModel");
                         if (Plugin.configBirthday.Value || (System.DateTime.Today.Month == 10 && System.DateTime.Today.Day == 23))
                         {
-                            classicSuit.unlockableName = "Birthday suit";
+                            //classicSuit.unlockableName = "Birthday suit";
                             classicSuit.headCostumeObject = classicSuitBundle.LoadAsset<GameObject>("PartyHatContainer");
                         }
-                        else
-                            classicSuit.unlockableName = "Brown suit";
+                        /*else
+                            classicSuit.unlockableName = "Brown suit";*/
                     }
                     else
                     {
                         suitTexture = classicSuitBundle.LoadAsset<Texture>("OldSuitMockUp");
                         classicSuit.suitMaterial.SetColor("_BaseColor", Color.white);
                         classicSuit.suitMaterial.SetTexture("_NormalMap", classicSuitBundle.LoadAsset<Texture>("ScavengerPlayerModel 1"));
-                        classicSuit.unlockableName = "Classic suit";
+                        //classicSuit.unlockableName = "Classic suit";
                     }
                     classicSuit.suitMaterial.SetTexture("_MainTex", suitTexture);
                     classicSuit.suitMaterial.SetTexture("_BaseColorMap", suitTexture);
@@ -85,7 +86,7 @@ namespace ClassicSuitRestoration
             InitClassicSuit();
             if (classicSuitIndex > 0 && StartOfRound.Instance.IsServer && !StartOfRound.Instance.isChallengeFile && !StartOfRound.Instance.SpawnedShipUnlockables.ContainsKey(classicSuitIndex))
             {
-                foreach (UnlockableSuit unlockableSuit in Object.FindObjectsOfType<UnlockableSuit>())
+                foreach (UnlockableSuit unlockableSuit in Object.FindObjectsByType<UnlockableSuit>(FindObjectsSortMode.None))
                 {
                     if (unlockableSuit.syncedSuitID.Value == classicSuitIndex)
                     {
@@ -109,17 +110,17 @@ namespace ClassicSuitRestoration
         internal static bool HasAllOtherSuits()
         {
             List<int> ownedSuits = [];
-            foreach (UnlockableSuit unlockableSuit in Object.FindObjectsOfType<UnlockableSuit>())
+            foreach (UnlockableSuit unlockableSuit in Object.FindObjectsByType<UnlockableSuit>(FindObjectsSortMode.None))
             {
                 ownedSuits.Add(unlockableSuit.syncedSuitID.Value);
-                Plugin.Logger.LogInfo($"Player owns suit #{unlockableSuit.syncedSuitID.Value} - \"{StartOfRound.Instance.unlockablesList.unlockables[unlockableSuit.syncedSuitID.Value].unlockableName}\"");
+                Plugin.Logger.LogDebug($"Player owns suit #{unlockableSuit.syncedSuitID.Value} - \"{StartOfRound.Instance.unlockablesList.unlockables[unlockableSuit.syncedSuitID.Value].unlockableName}\"");
             }
 
             for (int i = 1; i < classicSuitIndex; i++)
             {
                 if (StartOfRound.Instance.unlockablesList.unlockables[i].unlockableType == 0 && !ownedSuits.Contains(i))
                 {
-                    Plugin.Logger.LogInfo($"Player doesn't have #{i} - \"{StartOfRound.Instance.unlockablesList.unlockables[i].unlockableName}\"");
+                    Plugin.Logger.LogDebug($"Player doesn't have #{i} - \"{StartOfRound.Instance.unlockablesList.unlockables[i].unlockableName}\"");
                     return false;
                 }
             }
