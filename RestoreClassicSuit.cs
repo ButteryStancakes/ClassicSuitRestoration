@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ClassicSuitRestoration

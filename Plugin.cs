@@ -1,6 +1,7 @@
 ﻿using BepInEx;
-using BepInEx.Logging;
+using BepInEx.Bootstrap;
 using BepInEx.Configuration;
+using BepInEx.Logging;
 using HarmonyLib;
 
 namespace ClassicSuitRestoration
@@ -9,13 +10,23 @@ namespace ClassicSuitRestoration
     [BepInDependency("butterystancakes.lethalcompany.keepunlocks", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
-        const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.1";
+        internal const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.1";
         public static ConfigEntry<bool> configUnlockable, configOfficial, configBirthday;
+
+        const string GUID_LOBBY_COMPATIBILITY = "BMX.LobbyCompatibility";
 
         internal static new ManualLogSource Logger;
 
         void Awake()
         {
+            Logger = base.Logger;
+
+            if (Chainloader.PluginInfos.ContainsKey(GUID_LOBBY_COMPATIBILITY))
+            {
+                Logger.LogInfo("CROSS-COMPATIBILITY - Lobby Compatibility detected");
+                LobbyCompatibility.Init();
+            }
+
             configOfficial = Config.Bind(
                 "Suit",
                 "Official",
@@ -36,7 +47,6 @@ namespace ClassicSuitRestoration
 
             new Harmony(PLUGIN_GUID).PatchAll();
 
-            Logger = base.Logger;
             Logger.LogInfo($"{PLUGIN_NAME} v{PLUGIN_VERSION} loaded");
         }
     }
