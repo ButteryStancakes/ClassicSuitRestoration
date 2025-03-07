@@ -7,13 +7,14 @@ using HarmonyLib;
 namespace ClassicSuitRestoration
 {
     [BepInPlugin(PLUGIN_GUID, PLUGIN_NAME, PLUGIN_VERSION)]
-    [BepInDependency("butterystancakes.lethalcompany.keepunlocks", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(GUID_LOBBY_COMPATIBILITY, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(GUID_KEEP_UNLOCKS, BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
-        internal const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.1";
+        internal const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.2";
         public static ConfigEntry<bool> configUnlockable, configOfficial, configBirthday;
 
-        const string GUID_LOBBY_COMPATIBILITY = "BMX.LobbyCompatibility";
+        const string GUID_LOBBY_COMPATIBILITY = "BMX.LobbyCompatibility", GUID_KEEP_UNLOCKS = "butterystancakes.lethalcompany.keepunlocks";
 
         internal static new ManualLogSource Logger;
 
