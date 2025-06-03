@@ -11,7 +11,7 @@ namespace ClassicSuitRestoration
     [BepInDependency(GUID_KEEP_UNLOCKS, BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
-        internal const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.2";
+        internal const string PLUGIN_GUID = "butterystancakes.lethalcompany.classicsuitrestoration", PLUGIN_NAME = "Classic Suit Restoration", PLUGIN_VERSION = "2.1.3";
         public static ConfigEntry<bool> configUnlockable, configOfficial, configBirthday;
 
         const string GUID_LOBBY_COMPATIBILITY = "BMX.LobbyCompatibility", GUID_KEEP_UNLOCKS = "butterystancakes.lethalcompany.keepunlocks";

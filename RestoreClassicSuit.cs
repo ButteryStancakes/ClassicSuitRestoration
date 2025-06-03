@@ -95,8 +95,7 @@ namespace ClassicSuitRestoration
                     }
                 }
 
-                //typeof(StartOfRound).GetMethod("SpawnUnlockable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(StartOfRound.Instance, [classicSuitIndex]);
-                StartOfRound.Instance.SpawnUnlockable(classicSuitIndex);
+                StartOfRound.Instance.SpawnUnlockable(classicSuitIndex, false);
             }
         }
 
